@@ -1,0 +1,35 @@
+﻿@inject CartData _cart 
+<div class="row border-bottom py-4 card">
+    <div class="col-sm">
+        <div class="media">
+            <img src="@imgSrc" style="width:100px" altText="@Cart.imgText"
+                 class="mr-3" alt="Ảnh" />
+            <div class="media-body">
+                <h3>@Cart.imgText</h3>
+                <p>
+                    <MatNumericUpDownField Label="Số Lượng"
+                                           @bind-Value="@Cart.count">
+                    </MatNumericUpDownField>
+                    <button class="btn btn-danger" @onclick="@OnDeleteClicked">Delete</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        £@Cart.money
+    </div>
+</div>
+
+
+@code { 
+    [Parameter]
+    public Cart Cart { get; set; }
+    [Parameter]
+    public string imgSrc { get; set; }
+    [Parameter]
+    public EventCallback<Cart> Ondelete { get; set; } 
+    public async Task OnDeleteClicked()
+    {
+        await Ondelete.InvokeAsync(Cart);
+    }
+}

@@ -1,0 +1,66 @@
+﻿@page "/addItem"
+@inject CartData _cart
+<form>
+    <div class="form-group">
+        <label for="contentname">Content Name</label>
+        <input class="form-control" id="contentname" @bind="Name" placeholder="Enter content">
+    </div>
+    <div class="form-group">
+        <label for="money">Money</label>
+        <input class="form-control" id="money" @bind="Money" placeholder="Nhập số tiền">
+    </div>
+    <div class="form-group">
+        <label for="count">Số Lượng</label>
+        <input class="form-control" id="count" @bind="Count" placeholder="Nhập số lượng">
+    </div>
+    <div class="form-group">
+        <label for="img">Link ảnh</label>
+        <input class="form-control" id="img" @bind="img" placeholder="Nhập link ảnh">
+    </div>
+    <div class="form-inline">
+        <button type="button" class="btn btn-primary" @onclick="Add">Thêm</button>
+        <button type="button" class="btn btn-primary">Xoá</button>
+    </div>
+</form>
+
+@code {
+    private List<Cart> Carts;
+    private List<CartImg> CartImgs;
+
+    protected override void OnInitialized()
+    {
+        CartImgs = _cart.LoadData();
+        Carts = _cart.LoadCart();
+    }
+    void Reset()
+    {
+        Name = null;
+        Money = 0;
+        Count = 0;
+        img = null;
+
+    }
+    public string Name { get; set; }
+    public float Money { get; set; }
+    public int Count { get; set; }
+    public string img { get; set; }
+    void Add()
+    {
+        Cart cd = new Cart();
+        CartImg x = new CartImg();
+        var context = new Context();
+        cd.CardId = context.Carts.ToList().LastOrDefault().CardId+1;
+        cd.count = Count;
+        cd.imgText = Name;
+        cd.money = Money;
+        context.Add<Cart>(cd);
+        context.SaveChanges();
+        x.CartImgId = cd.CardId;
+        x.CartImgSrc = img;
+        x.CardId = cd.CardId;
+        context.Add<CartImg>(x);
+        context.SaveChanges();
+        Reset(); 
+    }
+}
+

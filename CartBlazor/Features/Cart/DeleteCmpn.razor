@@ -1,0 +1,41 @@
+﻿
+@using CartBlazor.Features.Cart
+@using CartBlazor.Data
+@inject CartData _cartImg
+@inject CartData _cart
+
+@foreach (var s in Carts)
+{
+    <Item imgSrc="@CartImgs.Where(x=>x.CardId == s.CardId).FirstOrDefault().CartImgSrc" 
+          Ondelete="RemoveItem" 
+          Cart="@s"></Item>
+    totalMoney += s.money*s.count;
+}
+<div class="row border-top py-5">Total £@totalMoney</div>
+
+
+@code{
+    public Cart cd { get; set; }
+    private List<CartImg> CartImgs;
+    private List<Cart> Carts;
+    private double totalMoney { get; set; }
+    void Onclicked() { } 
+
+
+    protected void RemoveItem(Cart cd)
+    {
+        var context = new Context();
+        context.Carts.Remove(cd);
+        context.SaveChanges();
+        Carts.Remove(cd);
+        StateHasChanged();
+    }
+    protected override void OnInitialized()
+    {
+        CartImgs = _cartImg.LoadData();
+        Carts = _cart.LoadCart(); 
+    }
+}
+
+
+

@@ -1,0 +1,25 @@
+﻿@page "/"
+
+@if (isRule)
+{
+    <button class="btn btn-primary" @onclick="Add">Thêm</button>
+    <DeleteCmpn></DeleteCmpn>
+}
+else
+{
+    <button class="btn btn-primary" @onclick="Add">Quay Lại</button>
+    <AddCpn></AddCpn>
+}
+
+@code{
+    [Parameter]
+    public bool isRule { get; set; }
+    void Add()
+    {
+        isRule = !isRule;
+    } 
+    protected override void OnInitialized()
+    {
+        isRule = true;
+    }
+}

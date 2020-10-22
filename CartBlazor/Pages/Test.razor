@@ -1,0 +1,26 @@
+﻿
+@using CartBlazor.Features.Cart
+@using CartBlazor.Data
+@inject CartData _cartImg
+@inject CartData _cart
+
+@foreach (var Cart in Carts)
+{
+    <Item imgText="@Cart.imgText"
+          money="@Cart.money"
+          imgSrc="@CartImgs.Where(x=>x.CardId == Cart.CardId).FirstOrDefault().CartImgSrc"></Item>
+}
+
+
+
+@code{
+
+    private List<CartImg> CartImgs;
+    private List<Cart> Carts;
+
+    protected override void OnInitialized()
+    {
+        CartImgs = _cartImg.LoadData();
+        Carts = _cart.LoadCart();
+    }
+}
